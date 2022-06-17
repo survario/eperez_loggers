@@ -1,7 +1,7 @@
-Emmanuel Perez - Desafío Servidor con Balance de Carga
+Emmanuel Perez - Desafío Leggers, Gzip y Análisis de Performance
 -------------------------------------------------------------
 
-El archivo comandos.txt contiene los comandos requeridos para este Desafío
+El archivo comandos.txt contiene los comandos requeridos para el desafío Servidor con Balance de Carga, Nginx.
 
 En el directorio de NGINX, se debe reemplazar el archivo nginx.conf, por el archivo del mismo nombre, incluído en este proyecto, en la carpeta raíz.
 
