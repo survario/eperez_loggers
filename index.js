@@ -305,8 +305,40 @@ app.use(session({
     });
   });
 
-/*   app.get("/info", (req, res) => {
-    //loggerInfo.info('info OK!')
+
+//Ruta /info con console.log (Desafío Loggers)
+  app.get("/info", (req, res) => {
+    loggerInfo.info( 
+      `Ruta /info, método GET: Servidor express en ${PORT} - <b>PID ${
+        process.pid
+      }</b> - ${new Date().toLocaleString()}`
+    );
+    console.log(
+      `args: ${process.argv.slice(2).join(" - ")},
+      OSName: ${process.platform},
+      nodeVersion: ${process.version},
+      usageOfMemory: ${process.memoryUsage()},
+      execPath: ${process.execPath},
+      PID: ${process.pid},
+      folder: ${process.cwd()},
+      numberOfProcessors: ${numCPUs},`
+    );
+    res.send({
+      args: process.argv.slice(2).join(" - "),
+      OSName: process.platform,
+      nodeVersion: process.version,
+      usageOfMemory: process.memoryUsage(),
+      execPath: process.execPath,
+      PID: process.pid,
+      folder: process.cwd(),
+      numberOfProcessors: numCPUs,
+    });
+  });  
+
+
+/*
+  //Ruta /info sin console.log (Desafío Loggers)
+  app.get("/info", (req, res) => {
     loggerInfo.info( 
       `Ruta /info, método GET: Servidor express en ${PORT} - <b>PID ${
         process.pid
@@ -322,63 +354,21 @@ app.use(session({
       folder: process.cwd(),
       numberOfProcessors: numCPUs,
     });
-  }); */
-
-  app.get("/info", (req, res) => {
-    const forked= fork(
-      process.on('message', (msg) => {
-        console.log(
-          `args: ${process.argv.slice(2).join(" - ")},
-          OSName: ${process.platform},
-          nodeVersion: ${process.version},
-          usageOfMemory: ${process.memoryUsage()},
-          execPath: ${process.execPath},
-          PID: ${process.pid},
-          folder: ${process.cwd()},
-          numberOfProcessors: ${numCPUs},`
-        )
-        loggerInfo.info( 
-          `Ruta /info, método GET: Servidor express en ${PORT} - <b>PID ${
-            process.pid
-          }</b> - ${new Date().toLocaleString()}`
-        );
-        res.send({
-          args: process.argv.slice(2).join(" - "),
-          OSName: process.platform,
-          nodeVersion: process.version,
-          usageOfMemory: process.memoryUsage(),
-          execPath: process.execPath,
-          PID: process.pid,
-          folder: process.cwd(),
-          numberOfProcessors: numCPUs,
-        });
-      })
-    )
-    forked.send('start')
-    forked.on('message', (mensaje) =>{
-      res.send(mensaje)
-    })
-    //loggerInfo.info('info OK!')
-  });
+  }); 
+*/
 
   app.get("/api/randoms", (req, res) => {
     let cant = req.query.cant || 100000000;
-  //const randoms = fork(__dirname + "/randoms.js", ["--CANT", cant]);
+    //const randoms = fork(__dirname + "/randoms.js", ["--CANT", cant]);
     const randoms = (__dirname + "/randoms.js", ["--CANT", cant]);
     randoms.on("message", (response) => {
       res.end(JSON.stringify(response));
     });
   });
 
-  app.use((req, res) => {
+  app.get('/', (req, res) => {
     //loggerWarn.warn("ruta incorrecta");
     loggerWarn.warn(` Ruta /${req.params}: ruta incorrecta`);
     res.send("ruta incorrecta");
   });
 }
-
-/*
-mongoose.connect('mongodb://localhost:27017/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(()=> console.log('conexion exitosa!'))
-    .catch(err => console.log(err))
-    */
